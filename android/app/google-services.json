@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "300483634359",
+    "firebase_url": "https://rydgo-a1743.firebaseio.com",
+    "project_id": "rydgo-a1743",
+    "storage_bucket": "rydgo-a1743.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300483634359:android:0bb6260e7086feb70d5932",
+        "android_client_info": {
+          "package_name": "com.rydgo.rydgo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300483634359-kof50r29lmg9g16rv6fc1rn8ibnn5jek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rydgo.rydgo",
+            "certificate_hash": "bcf31d3cf7f3628a5dfb4c0ce496468ad012b3b4"
+          }
+        },
+        {
+          "client_id": "300483634359-ep61c8cqcp1od6s0k1l804ahjvf7ej45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqIn1T0wQpeCpFglykUrL08pbd4c5L12Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300483634359-ep61c8cqcp1od6s0k1l804ahjvf7ej45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
