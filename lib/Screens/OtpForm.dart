@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:rydgo/Screens/BottomNavBar.dart';
+
 import 'package:rydgo/Screens/SignUp.dart';
+import 'package:rydgo/Services/DataBase.dart';
+
 import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpForm extends StatefulWidget {
@@ -13,10 +19,47 @@ class OtpForm extends StatefulWidget {
 }
 
 class _OtpState extends State<OtpForm> {
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
   final data, mobile;
   _OtpState({this.data, this.mobile});
-  bool _timeEnd = false;
+  bool _timeEnd, _result;
+  //bool _authFlag;
+
   final _otpController = TextEditingController();
+
+  @override
+  void initState() {
+    //_authFlag = false;
+    super.initState();
+    _timeEnd = false;
+    _result = false;
+
+    // _auth.authStateChanges().firstWhere((user) => user != null).then((user) {
+    //   if (_authFlag == false) {
+    //     setState(() {
+    //       _authFlag = true;
+    //     });
+    //     debugPrint('AUTH STATE HAS CHANGED OTP');
+    //     debugPrint('user id: ' + user.uid);
+    //     if (DataBaseService().getCollectionRef() != null) {
+    //       Navigator.push(
+    //           context,
+    //           MaterialPageRoute(
+    //               builder: (context) => MultiProvider(
+    //                     providers: [
+    //                       ChangeNotifierProvider.value(
+    //                         value: AppState(),
+    //                       )
+    //                     ],
+    //                     child: MyHomePage(),
+    //                   )));
+    //     } else {
+    //       Navigator.push(
+    //           context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+    //     }
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +70,7 @@ class _OtpState extends State<OtpForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Enter Otp",
+              "Enter OTP",
               style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -66,14 +109,7 @@ class _OtpState extends State<OtpForm> {
         elevation: 5.2,
         onPressed: () {
           final otp = _otpController.text.trim();
-          FirebaseAuth.instance.authStateChanges().listen((User user) {
-            if (user != null) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignUpScreen()));
-            } else {
-              signInn(otp, data);
-            }
-          });
+          signInn(otp, data);
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -105,7 +141,7 @@ class _OtpState extends State<OtpForm> {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Resend Otp',
+              text: _timeEnd == true ? 'Resend OTP' : null,
               style: TextStyle(
                 color: Colors.green[300],
                 fontSize: 18.0,
@@ -118,20 +154,39 @@ class _OtpState extends State<OtpForm> {
     );
   }
 
-  signInn(smsSent, verificationID) {
-    AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: verificationID, smsCode: smsSent);
-    FirebaseAuth.instance
-        .signInWithCredential(phoneAuthCredential)
-        .then((user) => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SignUpScreen()),
-            ))
-        //.catchError((e) => print(e));
-        .catchError((e) => _showErrorDialog(e.toString() ==
-                "firebase_auth/invalid-verification-code"
-            ? "Invalid Verification Code"
-            : "The sms code has expired. Please re-send the verification code"));
+  signInn(smsSent, verificationID) async {
+    try {
+      AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+          verificationId: verificationID, smsCode: smsSent);
+
+      await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      await getCollectionRef();
+      if (_result == true) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BottomNavBar()));
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+      }
+      // .then((user) => DataBaseService().getCollectionRef() != null
+      //     ? Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => BottomNavBar()))
+      //     : Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => SignUpScreen())));
+    } on FirebaseException catch (exception) {
+      switch (exception.code) {
+        case "invalid-verification-id":
+          _showErrorDialog("Invalid sms code");
+          break;
+        case "invalid-verification-code":
+          _showErrorDialog("Invalid sms code");
+          break;
+        case "session-expired":
+          _showErrorDialog(
+              "The sms code has expired. Please re-send the verification code to try again.");
+          break;
+      }
+    }
   }
 
   void _showErrorDialog(String msg) {
@@ -160,7 +215,9 @@ class _OtpState extends State<OtpForm> {
           tween: Tween(begin: 60.0, end: 0.0),
           duration: Duration(seconds: 60),
           onEnd: () {
-            _timeEnd = true;
+            setState(() {
+              _timeEnd = true;
+            });
           },
           builder: (_, value, child) => Text(
             "00:${value.toInt()}",
@@ -169,5 +226,22 @@ class _OtpState extends State<OtpForm> {
         ),
       ],
     );
+  }
+
+  Future getCollectionRef() async {
+    DocumentReference dbref = FirebaseFirestore.instance
+        .collection('_CtnSignUp')
+        .doc(FirebaseAuth.instance.currentUser.uid);
+
+    DocumentSnapshot snapshot = await dbref.get();
+    if (snapshot.exists) {
+      setState(() {
+        _result = true;
+      });
+    } else {
+      setState(() {
+        _result = false;
+      });
+    }
   }
 }

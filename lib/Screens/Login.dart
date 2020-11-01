@@ -15,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneController = TextEditingController();
 
-  String _email;
   String phoneNo, verificationID, smsSent;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -24,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    super.initState();
     _loginbtn = false;
   }
 

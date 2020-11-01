@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rydgo/Screens/MapScreen.dart';
-import 'package:rydgo/Services/app_state.dart';
+import 'package:rydgo/Screens/BottomNavBar.dart';
 import 'package:rydgo/Utilities/design.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:rydgo/Loaders/SignUpLoad.dart';
 import 'package:rydgo/Services/DataBase.dart';
-import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -254,22 +251,15 @@ class _SignUpScreen extends State<SignUpScreen> {
             _name,
             _selectedposition == 0
                 ? 'Male'
-                : _selectedposition == 1 ? 'Female' : 'Others',
+                : _selectedposition == 1
+                    ? 'Female'
+                    : 'Others',
             _email);
         setState(() {
           loading = false;
         });
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MultiProvider(
-                      providers: [
-                        ChangeNotifierProvider.value(
-                          value: AppState(),
-                        )
-                      ],
-                      child: MyHomePage(),
-                    )));
+            context, MaterialPageRoute(builder: (context) => BottomNavBar()));
       } on FirebaseAuthException catch (e) {
         setState(() {
           loading = false;
@@ -308,58 +298,58 @@ class _SignUpScreen extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? ShowLoading()
-        : Scaffold(
-            body: Form(
-              key: _formKey,
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      height: double.infinity,
-                      width: double.infinity,
-                    ),
-                    Container(
-                      height: double.infinity,
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40.0,
-                          vertical: 80.0,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Create Your Profile',
-                              style: TextStyle(
-                                color: Colors.green[400],
-                                fontFamily: 'OpenSans',
-                                fontSize: 30.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 30.0),
-                            _buildNameTF(),
-                            SizedBox(height: 10.0),
-                            _buildGender(),
-                            SizedBox(height: 10.0),
-                            _buildEmailTF(),
-                            SizedBox(height: 10.0),
-                            _buildSocialBtnRow(),
-                            SizedBox(height: 10.0),
-                            _buildRegisterBtn(),
-                          ],
-                        ),
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          body: Form(
+            key: _formKey,
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    color: Colors.white,
+                    height: double.infinity,
+                    width: double.infinity,
+                  ),
+                  Container(
+                    height: double.infinity,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 80.0,
                       ),
-                    )
-                  ],
-                ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Create Your Profile',
+                            style: TextStyle(
+                              color: Colors.green[400],
+                              fontFamily: 'OpenSans',
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 30.0),
+                          _buildNameTF(),
+                          SizedBox(height: 10.0),
+                          _buildGender(),
+                          SizedBox(height: 10.0),
+                          _buildEmailTF(),
+                          SizedBox(height: 10.0),
+                          _buildSocialBtnRow(),
+                          SizedBox(height: 10.0),
+                          _buildRegisterBtn(),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
-          );
+          ),
+        ));
   }
 }

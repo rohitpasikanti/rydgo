@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'rydgo',
       debugShowCheckedModeBanner: false,
-      home: AuthService().handleAuth(),
-      //theme: ThemeProvider.of(context),
+      home: AuthService(),
     );
   }
 }
