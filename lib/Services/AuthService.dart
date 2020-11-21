@@ -4,15 +4,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rydgo/Screens/BottomNavBar.dart';
 import 'package:rydgo/Screens/Login.dart';
 import 'package:rydgo/Screens/SignUp.dart';
-import 'package:rydgo/Services/DataBase.dart';
+//import 'package:rydgo/Services/DataBase.dart';
 
 class AuthService extends StatefulWidget {
   @override
   _AuthService createState() => _AuthService();
 
-  static signOut() {}
+  static signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 
-  void signIn(AuthCredential authresult) {}
+  void signIn(AuthCredential authresult) {
+    FirebaseAuth.instance.signInWithCredential(authresult);
+  }
 }
 
 class _AuthService extends State<AuthService> {

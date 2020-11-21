@@ -44,4 +44,26 @@ class DataBaseService {
     var storageRef = storage.ref().child("user/profile/$uid");
     return await storageRef.getDownloadURL();
   }
+
+  static Future<String> getToken(userId) async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    var token;
+
+    await _db.collection('_CtnSignUp').doc(userId).get().then((value) {
+      token = value.id;
+    });
+    // var token;
+    // await _db
+    //     .collection('_CtnSignUp')
+    //     .doc(userId)
+    //     .collection('_CtnSignUp')
+    //     .get()
+    //     .then((snapshot) {
+    //   snapshot.docs.forEach((doc) {
+    //     token = doc.id;
+    //   });
+    // });
+
+    return token;
+  }
 }

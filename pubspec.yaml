@@ -49,10 +49,15 @@ dependencies:
   provider: "^3.0.0+1"
   uuid: ^2.2.2
   flutter_polyline_points: ^0.2.4
-  dio: "^2.1.13"
+  dio: ^3.0.10
   vector_math: ^2.0.8
   image_picker: ^0.6.7+12
   firebase_storage: ^4.0.1
+  google_sign_in: ^4.5.5
+  firebase_messaging: ^7.0.3
+  fluttertoast: ^7.1.1
+  
+  
 
 dev_dependencies:
   flutter_test:

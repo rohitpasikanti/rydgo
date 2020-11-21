@@ -5,6 +5,7 @@ import 'package:rydgo/Screens/BottomNavBar.dart';
 import 'package:rydgo/Utilities/design.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rydgo/Services/DataBase.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -227,7 +228,7 @@ class _SignUpScreen extends State<SignUpScreen> {
             ),
           ),
           _buildSocialBtn(
-            () => print('Login with Google'),
+            () => _googleSignIn(),
             AssetImage(
               'assets/logos/google.jpg',
             ),
@@ -235,6 +236,19 @@ class _SignUpScreen extends State<SignUpScreen> {
         ],
       ),
     );
+  }
+
+  _googleSignIn() async {
+    print('Login with Facebook');
+    String _googleUserMail;
+    GoogleSignIn _google = GoogleSignIn(scopes: ['email']);
+    GoogleSignInAccount _googleAccount =
+        await _google.signInSilently().then((value) {
+      setState(() {
+        _googleUserMail = value.email;
+      });
+      return;
+    });
   }
 
   Future<void> signUp() async {
@@ -258,7 +272,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         setState(() {
           loading = false;
         });
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => BottomNavBar()));
       } on FirebaseAuthException catch (e) {
         setState(() {

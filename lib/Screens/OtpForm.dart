@@ -162,10 +162,10 @@ class _OtpState extends State<OtpForm> {
       await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
       await getCollectionRef();
       if (_result == true) {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => BottomNavBar()));
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignUpScreen()));
       }
       // .then((user) => DataBaseService().getCollectionRef() != null

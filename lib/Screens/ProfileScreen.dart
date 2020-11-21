@@ -193,7 +193,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                         RaisedButton(
                           onPressed: () async {
                             await updateDetails();
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => BottomNavBar()));
@@ -215,7 +215,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                           onPressed: () async {
                             await AuthService.signOut();
 
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => LoginScreen()));
@@ -348,7 +348,7 @@ class _ProfileScreen extends State<ProfileScreen> {
       setState(() {
         loading = false;
       });
-      Navigator.push(
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     }
   }

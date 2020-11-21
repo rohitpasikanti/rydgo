@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:rydgo/Screens/AvailableRides.dart';
 import 'package:rydgo/Services/AuthService.dart';
 
 void main() async {
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'rydgo',
-      debugShowCheckedModeBanner: false,
-      home: AuthService(),
-    );
+        title: 'rydgo',
+        debugShowCheckedModeBanner: false,
+        home: AvailableRides() //AuthService(),
+        );
   }
 }
